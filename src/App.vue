@@ -33,6 +33,31 @@ const initialItems = () => [
   null,
   null,
 ];
+
+const arrayContain = (chooses, should) => {
+  let willBack = true;
+  should.forEach((item) => {
+    if (!chooses.includes(item)) {
+      willBack = false;
+    }
+  });
+
+  return willBack;
+};
+
+const checkEndGame = (chooses) => {
+  return (
+    arrayContain(chooses, [1, 2, 3]) ||
+    arrayContain(chooses, [4, 5, 6]) ||
+    arrayContain(chooses, [7, 8, 9]) ||
+    arrayContain(chooses, [1, 4, 7]) ||
+    arrayContain(chooses, [2, 5, 8]) ||
+    arrayContain(chooses, [3, 6, 9]) ||
+    arrayContain(chooses, [1, 5, 9]) ||
+    arrayContain(chooses, [3, 5, 7])
+  );
+};
+
 export default {
   name: "App",
   data() {
@@ -74,9 +99,9 @@ export default {
   watch: {
     items() {},
     myChooses(newValue) {
-      console.log(newValue);
-      if ([2, 3].length == 0) {
+      if (checkEndGame(newValue.map((item) => item + 1))) {
         // win
+        alert("win");
       } else {
         this.turn = "enemy";
         this.enemyChoose();
@@ -84,8 +109,9 @@ export default {
     },
     enemyChooses(newValue) {
       console.log(newValue);
-      if ([2, 3].length == 0) {
+      if (checkEndGame(newValue.map((item) => item + 1))) {
         // loose
+        alert("loose");
       } else {
         this.turn = "me";
       }
