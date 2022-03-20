@@ -11,7 +11,7 @@
         :key="index"
         @click="
           () => {
-            clickItemHandeler(index + 1);
+            clickItemHandeler(index);
           }
         "
         class="item"
@@ -31,16 +31,18 @@ export default {
     };
   },
   methods: {
-    clickItemHandeler(id) {
-      alert(id);
+    clickItemHandeler(index) {
+      const newItems = [...this.items];
+      newItems[index] = "me";
+      this.items = newItems;
     },
   },
   mounted() {
-    let points = "";
-    setInterval(() => {
-      points = points === "..." ? "" : points + ".";
-      this.$refs.turn.innerHTML = `turn : ${this.turn} ${points}`;
-    }, 300);
+    // let points = "";
+    // setInterval(() => {
+    //   points = points === "..." ? "" : points + ".";
+    //   this.$refs.turn.innerHTML = `turn : ${this.turn} ${points}`;
+    // }, 300);
   },
 };
 </script>
