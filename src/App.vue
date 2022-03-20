@@ -68,11 +68,12 @@ export default {
       myScore: 0,
       myChooses: [],
       enemyChooses: [],
+      endGame: false,
     };
   },
   methods: {
     clickItemHandeler(index) {
-      if (this.turn === "me" && !this.items[index]) {
+      if (this.turn === "me" && !this.items[index] && !this.endGame) {
         const newItems = [...this.items];
         newItems[index] = "me";
         this.items = newItems;
@@ -101,10 +102,11 @@ export default {
     myChooses(newValue) {
       if (checkEndGame(newValue.map((item) => item + 1))) {
         // win
-        alert("win");
+        this.endGame = true;
+        this.myScore += 1;
       } else if (!this.items.filter((item) => item === null).length) {
-        // same
-        alert("same");
+        // Equal
+        this.endGame = true;
       } else {
         this.turn = "enemy";
         this.enemyChoose();
@@ -114,10 +116,11 @@ export default {
       console.log(newValue);
       if (checkEndGame(newValue.map((item) => item + 1))) {
         // loose
-        alert("loose");
+        this.endGame = true;
+        this.enemyScore += 1;
       } else if (!this.items.filter((item) => item === null).length) {
-        // same
-        alert("same");
+        // Equal
+        this.endGame = true;
       } else {
         this.turn = "me";
       }
