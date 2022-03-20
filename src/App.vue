@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="info">
-      <p ref="turn">turn : me</p>
+      <p ref="info-turn"></p>
       <p>my score : 6</p>
       <p>my score : 9</p>
     </div>
@@ -15,7 +15,7 @@
           }
         "
         class="item"
-        :class="{ [`item-${item}`]: item }"
+        :class="{ [`item-${item}`]: item, 'item-hover': turn == 'me' }"
       ></div>
     </div>
   </div>
@@ -32,17 +32,22 @@ export default {
   },
   methods: {
     clickItemHandeler(index) {
-      const newItems = [...this.items];
-      newItems[index] = "me";
-      this.items = newItems;
+      if (this.turn === "me" && !this.items[index]) {
+        const newItems = [...this.items];
+        newItems[index] = "me";
+        this.items = newItems;
+        this.turn = "enemy";
+      }
     },
   },
   mounted() {
-    // let points = "";
-    // setInterval(() => {
-    //   points = points === "..." ? "" : points + ".";
-    //   this.$refs.turn.innerHTML = `turn : ${this.turn} ${points}`;
-    // }, 300);
+    let points = "";
+    setInterval(() => {
+      points = points === "..." ? "" : points + ".";
+      this.$refs["info-turn"].innerHTML = `turn : ${this.turn} ${
+        this.turn == "enemy" ? points : ""
+      }`;
+    }, 300);
   },
 };
 </script>
@@ -87,16 +92,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 }
 
-.item.item-me,
-.item.item-enemy {
-  cursor: auto !important;
-  pointer-events: none;
-}
-.item:not(.item-me, .item-enemy):hover {
+.item-hover:not(.item-me, .item-enemy):hover {
   background-color: #eee;
+  cursor: pointer;
 }
 
 .item:nth-child(3n) {
