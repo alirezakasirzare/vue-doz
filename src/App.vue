@@ -102,6 +102,9 @@ export default {
       if (checkEndGame(newValue.map((item) => item + 1))) {
         // win
         alert("win");
+      } else if (!this.items.filter((item) => item === null).length) {
+        // same
+        alert("same");
       } else {
         this.turn = "enemy";
         this.enemyChoose();
@@ -112,6 +115,9 @@ export default {
       if (checkEndGame(newValue.map((item) => item + 1))) {
         // loose
         alert("loose");
+      } else if (!this.items.filter((item) => item === null).length) {
+        // same
+        alert("same");
       } else {
         this.turn = "me";
       }
