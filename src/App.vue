@@ -3,7 +3,7 @@
     <div class="info">
       <p ref="info-turn"></p>
       <p>my score : {{ myScore }}</p>
-      <p>my score : {{ enemyScore }}</p>
+      <p>enemy score : {{ enemyScore }}</p>
     </div>
     <div
       class="end-game"
@@ -74,13 +74,12 @@ export default {
       myScore: 0,
       myChooses: [],
       enemyChooses: [],
-      endGame: false,
       endGameInfo: null,
     };
   },
   methods: {
     clickItemHandeler(index) {
-      if (this.turn === "me" && !this.items[index] && !this.endGame) {
+      if (this.turn === "me" && !this.items[index]) {
         const newItems = [...this.items];
         newItems[index] = "me";
         this.items = newItems;
@@ -109,27 +108,51 @@ export default {
     myChooses(newValue) {
       if (checkEndGame(newValue.map((item) => item + 1))) {
         // win
-        this.endGame = true;
         this.myScore += 1;
+        this.turn = "end";
+        setTimeout(() => {
+          this.endGameInfo = "win";
+        }, 1000);
       } else if (!this.items.filter((item) => item === null).length) {
         // Equal
-        this.endGame = true;
+        this.turn = "end";
+        setTimeout(() => {
+          this.endGameInfo = "equal";
+        }, 1000);
       } else {
-        this.turn = "enemy";
-        this.enemyChoose();
+        if (newValue.length) {
+          this.turn = "enemy";
+          this.enemyChoose();
+        }
       }
     },
     enemyChooses(newValue) {
-      console.log(newValue);
       if (checkEndGame(newValue.map((item) => item + 1))) {
-        // loose
-        this.endGame = true;
+        // losse
         this.enemyScore += 1;
+        this.turn = "end";
+        setTimeout(() => {
+          this.endGameInfo = "losse";
+        }, 1000);
       } else if (!this.items.filter((item) => item === null).length) {
         // Equal
-        this.endGame = true;
+        this.turn = "end";
+        setTimeout(() => {
+          this.endGameInfo = "equal";
+        }, 1000);
       } else {
         this.turn = "me";
+      }
+    },
+    endGameInfo(newValue) {
+      if (newValue) {
+        setTimeout(() => {
+          this.endGameInfo = null;
+          this.items = initialItems();
+          this.myChooses = [];
+          this.enemyChooses = [];
+          this.turn = "me";
+        }, 3000);
       }
     },
   },
