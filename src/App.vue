@@ -5,6 +5,12 @@
       <p>my score : {{ myScore }}</p>
       <p>my score : {{ enemyScore }}</p>
     </div>
+    <div
+      class="end-game"
+      :class="{ [`end-game-${endGameInfo}`]: endGameInfo }"
+      v-show="endGameInfo"
+      v-text="endGameInfo"
+    ></div>
     <div class="game">
       <div
         v-for="(item, index) in items"
@@ -69,6 +75,7 @@ export default {
       myChooses: [],
       enemyChooses: [],
       endGame: false,
+      endGameInfo: null,
     };
   },
   methods: {
@@ -225,35 +232,30 @@ export default {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* .item-me::after {
-  width: 50%;
-  height: 50%;
-  border: 3px solid #4caf50;
-  border-radius: 50%;
-}
-
-.item-enemy {
-  width: 50%;
-  height: 50%;
-  position: relative;
-}
-
-.item-enemy::after,
-.item-enemy::before {
-  content: "";
+/* end game info */
+.end-game {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 3px;
-  height: 100%;
-  background-color: #f44336;
+  top: 20%;
+  transform: translateX(-50%);
+  width: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
 }
 
-.item-enemy::after {
-  transform: translate(-50%, -50%) rotate(45deg);
+.end-game-win {
+  background: #4caf50;
+  color: #fff;
 }
 
-.item-enemy::before {
-  transform: translate(-50%, -50%) rotate(-45deg);
-} */
+.end-game-losse {
+  background: #f44336;
+  color: #fff;
+}
+
+.end-game-equal {
+  background: #999;
+  color: #fff;
+}
 </style>
