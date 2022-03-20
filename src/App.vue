@@ -22,12 +22,23 @@
 </template>
 
 <script>
+const initialItems = () => [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+];
 export default {
   name: "App",
   data() {
     return {
       turn: "me",
-      items: [null, null, "me", null, "enemy", null, null, null, null],
+      items: initialItems(),
     };
   },
   methods: {
@@ -37,7 +48,24 @@ export default {
         newItems[index] = "me";
         this.items = newItems;
         this.turn = "enemy";
+        this.enemyChoose();
       }
+    },
+    enemyChoose() {
+      setTimeout(() => {
+        const notChoosedYet = [...this.items]
+          .map((item, index) => {
+            if (!item) return index;
+          })
+          .filter((item) => item !== undefined);
+
+        const newItems = [...this.items];
+        newItems[
+          notChoosedYet[Math.floor(Math.random() * notChoosedYet.length)]
+        ] = "enemy";
+        this.items = newItems;
+        this.turn = "me";
+      }, 3000);
     },
   },
   mounted() {
