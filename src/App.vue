@@ -1,20 +1,22 @@
 <template>
   <div class="container">
     <div class="info">
-      <p>turn : me</p>
+      <p ref="turn">turn : me</p>
       <p>my score : 6</p>
       <p>my score : 9</p>
     </div>
     <div class="game">
-      <div class="item"></div>
-      <div class="item"></div>
-      <div class="item item-me"></div>
-      <div class="item"></div>
-      <div class="item"></div>
-      <div class="item item-enemy"></div>
-      <div class="item"></div>
-      <div class="item"></div>
-      <div class="item"></div>
+      <div
+        v-for="(item, index) in items"
+        :key="index"
+        @click="
+          () => {
+            clickItemHandeler(index + 1);
+          }
+        "
+        class="item"
+        :class="{ [`item-${item}`]: item }"
+      ></div>
     </div>
   </div>
 </template>
@@ -22,7 +24,24 @@
 <script>
 export default {
   name: "App",
-  components: {},
+  data() {
+    return {
+      turn: "me",
+      items: [null, null, "me", null, "enemy", null, null, null, null],
+    };
+  },
+  methods: {
+    clickItemHandeler(id) {
+      alert(id);
+    },
+  },
+  mounted() {
+    let points = "";
+    setInterval(() => {
+      points = points === "..." ? "" : points + ".";
+      this.$refs.turn.innerHTML = `turn : ${this.turn} ${points}`;
+    }, 300);
+  },
 };
 </script>
 
@@ -66,10 +85,16 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+
+.item.item-me,
+.item.item-enemy {
+  cursor: auto !important;
+  pointer-events: none;
 }
 .item:not(.item-me, .item-enemy):hover {
   background-color: #eee;
-  cursor: pointer;
 }
 
 .item:nth-child(3n) {
