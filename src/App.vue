@@ -2,8 +2,8 @@
   <div class="container">
     <div class="info">
       <p ref="info-turn"></p>
-      <p>my score : 6</p>
-      <p>my score : 9</p>
+      <p>my score : {{ myScore }}</p>
+      <p>my score : {{ enemyScore }}</p>
     </div>
     <div class="game">
       <div
@@ -39,6 +39,10 @@ export default {
     return {
       turn: "me",
       items: initialItems(),
+      enemyScore: 0,
+      myScore: 0,
+      myChooses: [],
+      enemyChooses: [],
     };
   },
   methods: {
@@ -47,8 +51,7 @@ export default {
         const newItems = [...this.items];
         newItems[index] = "me";
         this.items = newItems;
-        this.turn = "enemy";
-        this.enemyChoose();
+        this.myChooses = [...this.myChooses, index];
       }
     },
     enemyChoose() {
@@ -60,12 +63,32 @@ export default {
           .filter((item) => item !== undefined);
 
         const newItems = [...this.items];
-        newItems[
-          notChoosedYet[Math.floor(Math.random() * notChoosedYet.length)]
-        ] = "enemy";
+        const index =
+          notChoosedYet[Math.floor(Math.random() * notChoosedYet.length)];
+        newItems[index] = "enemy";
         this.items = newItems;
-        this.turn = "me";
+        this.enemyChooses = [...this.enemyChooses, index];
       }, 3000);
+    },
+  },
+  watch: {
+    items() {},
+    myChooses(newValue) {
+      console.log(newValue);
+      if ([2, 3].length == 0) {
+        // win
+      } else {
+        this.turn = "enemy";
+        this.enemyChoose();
+      }
+    },
+    enemyChooses(newValue) {
+      console.log(newValue);
+      if ([2, 3].length == 0) {
+        // loose
+      } else {
+        this.turn = "me";
+      }
     },
   },
   mounted() {
